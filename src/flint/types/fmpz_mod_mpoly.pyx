@@ -759,7 +759,8 @@ cdef class fmpz_mod_mpoly(flint_mpoly):
         elif not self.ctx.is_prime():
             raise DomainError("gcd with non-prime modulus is not supported")
         res = create_fmpz_mod_mpoly(self.ctx)
-        fmpz_mod_mpoly_gcd(res.val, (<fmpz_mod_mpoly>self).val, (<fmpz_mod_mpoly>other).val, res.ctx.val)
+        if not fmpz_mod_mpoly_gcd(res.val, (<fmpz_mod_mpoly>self).val, (<fmpz_mod_mpoly>other).val, res.ctx.val):
+            raise RuntimeError("failed to compute gcd")
         return res
 
     def term_content(self):

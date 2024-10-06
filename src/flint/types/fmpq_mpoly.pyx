@@ -750,7 +750,8 @@ cdef class fmpq_mpoly(flint_mpoly):
         elif (<fmpq_mpoly>self).ctx is not (<fmpq_mpoly>other).ctx:
             raise IncompatibleContextError(f"{(<fmpq_mpoly>self).ctx} is not {(<fmpq_mpoly>other).ctx}")
         res = create_fmpq_mpoly(self.ctx)
-        fmpq_mpoly_gcd(res.val, (<fmpq_mpoly>self).val, (<fmpq_mpoly>other).val, res.ctx.val)
+        if not fmpq_mpoly_gcd(res.val, (<fmpq_mpoly>self).val, (<fmpq_mpoly>other).val, res.ctx.val):
+            raise RuntimeError("failed to compute gcd")
         return res
 
     def term_content(self):
